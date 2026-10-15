@@ -4,6 +4,8 @@
 
 This repository contains a tested local vertical slice for evidence-first short-video analysis plus the production foundation for claim-level scoring and reproducible evaluation. The UI and API deliberately show **No evaluation results yet** until a real benchmark run is supplied.
 
+An owner-private production demo is deployed at [Bridge — Beyond Translation](https://bridge-beyond-translation.asherjavaid07.chatgpt.site). Sign in with the ChatGPT account that owns the Site. Its lightweight Worker implementation lives in `apps/demo-site`; the FastAPI and Next.js applications remain the fuller local reference implementation.
+
 ## What is implemented
 
 - Versioned evidence scoring with configurable weights and provisional thresholds.
@@ -18,13 +20,15 @@ This repository contains a tested local vertical slice for evidence-first short-
 - Idempotent analysis jobs and structured Gemini Files API integration with citation-reference validation.
 - Explicit, tested failure behavior when the Gemini key is missing; no fixture is substituted for live output.
 - Unit tests covering every formula, missing labels, zero denominators, threshold boundaries, contradiction overrides, and cost calculations.
+- An owner-private, responsive production demo with direct server-side Gemini Files API integration, upload validation, same-origin checks, basic per-IP rate limiting, provider-file cleanup, and an honest evaluation empty state.
 
-Not yet production-ready: jobs and records are process-local, storage is local rather than object storage, Gemini has not been exercised with a real credential in this environment, the curated retrieval corpus is absent, and feedback/reviewer/auth/deployment flows are not implemented. See [the audit](docs/AUDIT.md) and [living implementation plan](docs/IMPLEMENTATION_PLAN.md).
+Not yet production-ready: the full local app's jobs and records are process-local, storage is local rather than object storage, the curated retrieval corpus is absent, and feedback/reviewer workflows are not implemented. Gemini account/model access is verified, but a live video inference was not run because no licensed media fixture was supplied. See [the audit](docs/AUDIT.md) and [living implementation plan](docs/IMPLEMENTATION_PLAN.md).
 
 ## Repository layout
 
 ```text
 apps/api/       FastAPI scoring and evaluation service
+apps/demo-site/ Production demo Worker deployed through Sites
 apps/web/       Next.js dashboard
 config/         Versioned scoring and pricing configuration
 docs/           Product, architecture, mathematics, and decisions
@@ -86,7 +90,7 @@ For the exact definitions, missing-data policy, assumptions, and limitations, re
 
 ## AI configuration
 
-`GEMINI_MODEL` defaults to `gemini-3.8-flash`, the current Flash model documented by Google for multimodal video input. Model access must still be verified against the live Google AI account before the first inference. Pricing is not embedded in formulas: it is versioned in [`config/model-pricing.v1.json`](config/model-pricing.v1.json) and should be updated when the provider changes rates.
+`GEMINI_MODEL` defaults to `gemini-3.8-flash`. Access to that model was verified against the configured Google AI account, but no live video inference or benchmark result is claimed. Pricing is not embedded in formulas: it is versioned in [`config/model-pricing.v1.json`](config/model-pricing.v1.json) and should be updated when the provider changes rates.
 
 ## Safety and privacy
 
