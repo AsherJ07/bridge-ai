@@ -21,6 +21,26 @@ FastAPI API
 
 The scoring and aggregation modules are pure apart from explicit configuration loading. Analysis jobs run as FastAPI background tasks and are polled by the browser. This makes the local journey functional, but jobs and records are lost on restart and are not safe across multiple API workers.
 
+## Current deployed slice
+
+```text
+Next.js on Vercel
+        │ short-lived upload authorization
+        ▼
+Private Vercel Blob ──stream──► Gemini Files API
+        ▲                              │
+        │ direct browser upload        ▼
+        └──────────────────── structured generation
+                                       │
+                                       ▼
+                            schema + evidence guards
+                                       │
+                                       ▼
+                            result + actual model/usage
+```
+
+The deployed route deletes the Gemini file and Blob object in a `finally` path. These operations are best-effort, so production still needs monitoring and a reconciliation process. Its rate limiter is process-local and therefore not a distributed abuse-control boundary.
+
 ## Target production request flow
 
 1. The web app uploads validated media directly to private storage through a short-lived signed request.

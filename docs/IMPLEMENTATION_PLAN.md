@@ -1,6 +1,6 @@
 # Living implementation plan
 
-Last updated: 2026-10-14
+Last updated: 2026-10-15
 
 ## Status legend
 
@@ -23,10 +23,10 @@ Last updated: 2026-10-14
 ## Phase 2 — Working analysis vertical slice
 
 - [ ] Add PostgreSQL entities and Alembic migrations for media, jobs, transcripts, evidence, interpretations, feedback, and evaluation.
-- [~] Implemented server-side MP4/MOV/WebM content, size, duration, and SHA-256 validation with private local temporary storage and bounded cleanup. Private object storage remains open.
+- [~] Implemented server-side MP4/MOV/WebM content, size, and duration validation. The local service also hashes files; the deployed route uses private Vercel Blob with short-lived direct-upload authorization and best-effort deletion. Retention reconciliation remains open.
 - [~] Implemented idempotent in-process background jobs and real polled stages. Redis-backed durability and multi-worker safety remain open.
-- [~] Implemented Gemini Files API upload, bounded preparation wait, structured multimodal response schema, and provider-file deletion request. Live-account execution remains unverified because no credential is available.
-- [~] Model, prompt, pipeline, and usage metadata are returned in the job result. Durable persistence and measured latency remain open.
+- [x] Implemented Gemini Files API upload, bounded preparation wait, JSON-schema structured output, model-capacity fallback, provider-file deletion request, and a successful deployed video smoke test.
+- [~] Model, prompt, pipeline, and usage metadata are returned in the result. Durable persistence and benchmark-grade latency measurement remain open.
 
 ## Phase 3 — Grounding and product flow
 
@@ -46,8 +46,7 @@ Last updated: 2026-10-14
 
 ## Active risks
 
-1. No Gemini API credential is present, so live model access and an end-to-end clip run are not verified.
-2. No licensed video fixtures or verified reviewer labels exist yet.
-3. Hosting and private object-storage providers are not selected.
-4. Evidence thresholds need selection on a held-out labeled set before any calibration claim.
-5. Authentication, rate limiting, durable storage/jobs, and production retention enforcement are not implemented.
+1. The Gemini key and deployed video path are verified, but provider capacity remains variable even with the fallback chain.
+2. No frozen evaluation corpus or verified reviewer labels exist yet; the licensed connectivity clip is not an evaluation set.
+3. Evidence thresholds need selection on a held-out labeled set before any calibration claim.
+4. Product authentication, distributed rate limiting, durable jobs, monitoring, and production retention enforcement are not implemented. The current Vercel sign-in gate is deployment protection, not product authentication.

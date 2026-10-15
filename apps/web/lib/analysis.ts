@@ -27,7 +27,8 @@ export interface AnalysisResponse {
 
 export async function apiError(response: Response): Promise<string> {
   try {
-    const body = (await response.json()) as { detail?: string | Array<{ msg: string }> };
+    const body = (await response.json()) as { detail?: string | Array<{ msg: string }>; message?: string };
+    if (typeof body.message === "string") return body.message;
     if (typeof body.detail === "string") return body.detail;
     if (Array.isArray(body.detail)) return body.detail.map((item) => item.msg).join("; ");
   } catch {

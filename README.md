@@ -4,7 +4,7 @@
 
 This repository contains a tested local vertical slice for evidence-first short-video analysis plus the production foundation for claim-level scoring and reproducible evaluation. The UI and API deliberately show **No evaluation results yet** until a real benchmark run is supplied.
 
-An owner-private production demo is deployed at [Bridge — Beyond Translation](https://bridge-beyond-translation.asherjavaid07.chatgpt.site). Sign in with the ChatGPT account that owns the Site. Its lightweight Worker implementation lives in `apps/demo-site`; the FastAPI and Next.js applications remain the fuller local reference implementation.
+An owner-private Vercel deployment is live at [Bridge — Beyond Translation](https://bridge-beyond-translation.vercel.app). Vercel Authentication is currently enabled, so a member of the owning Vercel team must sign in. The deployed Next.js app uses direct client upload to private Vercel Blob storage and server-side Gemini analysis; the FastAPI service remains the fuller local evaluation and job-processing reference.
 
 ## What is implemented
 
@@ -20,16 +20,16 @@ An owner-private production demo is deployed at [Bridge — Beyond Translation](
 - Idempotent analysis jobs and structured Gemini Files API integration with citation-reference validation.
 - Explicit, tested failure behavior when the Gemini key is missing; no fixture is substituted for live output.
 - Unit tests covering every formula, missing labels, zero denominators, threshold boundaries, contradiction overrides, and cost calculations.
-- An owner-private, responsive production demo with direct server-side Gemini Files API integration, upload validation, same-origin checks, basic per-IP rate limiting, provider-file cleanup, and an honest evaluation empty state.
+- An owner-private, responsive Vercel demo with direct-to-private-Blob upload, server-side Gemini Files API integration, upload validation, same-origin checks, best-effort per-instance rate limiting, temporary-file cleanup, and an honest evaluation empty state.
 
-Not yet production-ready: the full local app's jobs and records are process-local, storage is local rather than object storage, the curated retrieval corpus is absent, and feedback/reviewer workflows are not implemented. Gemini account/model access is verified, but a live video inference was not run because no licensed media fixture was supplied. See [the audit](docs/AUDIT.md) and [living implementation plan](docs/IMPLEMENTATION_PLAN.md).
+Not yet production-ready: the local FastAPI app's jobs and records are process-local, the Vercel analysis route has no durable job queue, the curated retrieval corpus is absent, and feedback/reviewer workflows are not implemented. A real licensed connectivity clip completed through the deployed storage and Gemini path, but that smoke test is not a benchmark or quality claim. See [the audit](docs/AUDIT.md) and [living implementation plan](docs/IMPLEMENTATION_PLAN.md).
 
 ## Repository layout
 
 ```text
 apps/api/       FastAPI scoring and evaluation service
-apps/demo-site/ Production demo Worker deployed through Sites
-apps/web/       Next.js dashboard
+apps/demo-site/ Legacy lightweight Sites Worker
+apps/web/       Next.js dashboard and Vercel analysis deployment
 config/         Versioned scoring and pricing configuration
 docs/           Product, architecture, mathematics, and decisions
 ```
@@ -90,11 +90,11 @@ For the exact definitions, missing-data policy, assumptions, and limitations, re
 
 ## AI configuration
 
-`GEMINI_MODEL` defaults to `gemini-3.8-flash`. Access to that model was verified against the configured Google AI account, but no live video inference or benchmark result is claimed. Pricing is not embedded in formulas: it is versioned in [`config/model-pricing.v1.json`](config/model-pricing.v1.json) and should be updated when the provider changes rates.
+`GEMINI_MODEL` defaults to `gemini-3.8-flash`. `GEMINI_FALLBACK_MODELS` provides an ordered capacity fallback chain; the result records the model actually used. Deployed video smoke tests completed with fallback models (`gemini-3.6-flash` and, on the final guarded build, `gemini-3.5-flash-lite`). This verifies connectivity and contract handling only—no benchmark result is claimed. Pricing is not embedded in formulas: it is versioned in [`config/model-pricing.v1.json`](config/model-pricing.v1.json) and should be updated when the provider changes rates.
 
 ## Safety and privacy
 
-Heuristic support scores are diagnostic values, not empirical probabilities. Bridge never renders them as a “confidence percentage.” Human-evaluation metrics require verified reference labels. The local slice requires disclosure before sending media to Gemini and uses private temporary files; production still requires durable private object storage and enforceable retention.
+Heuristic support scores are diagnostic values, not empirical probabilities. Bridge never renders them as a “confidence percentage.” Human-evaluation metrics require verified reference labels. The upload flow requires disclosure before sending media to Gemini, stores clips in a private Blob store, and requests deletion from Blob and Gemini in a `finally` path. Production still needs deletion reconciliation and monitoring because provider deletion is best-effort.
 
 ## Documentation
 
