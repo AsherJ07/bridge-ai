@@ -1,0 +1,17 @@
+{
+  "version": "google-gemini-pricing-2026-10-14",
+  "currency": "USD",
+  "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+  "models": {
+    "gemini-3.8-flash": {
+      "service_tier": "standard",
+      "effective_from": "2026-01-01",
+      "effective_through": "2026-12-31",
+      "per_million_tokens": {
+        "input": 0.75,
+        "output_including_thinking": 3.75,
+        "cached_input": 0.075
+      }
+    }
+  }
+}

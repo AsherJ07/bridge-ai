@@ -1,0 +1,15 @@
+{
+  "name": "bridge-ai",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["apps/web"],
+  "scripts": {
+    "dev:web": "npm --workspace @bridge/web run dev",
+    "build": "npm --workspace @bridge/web run build",
+    "typecheck": "npm --workspace @bridge/web run typecheck",
+    "lint": "npm --workspace @bridge/web run lint"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

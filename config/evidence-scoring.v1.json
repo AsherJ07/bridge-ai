@@ -1,0 +1,17 @@
+{
+  "version": "evidence-score-v1.0.0",
+  "provisional": true,
+  "weights": {
+    "relevance": 0.30,
+    "entailment": 0.35,
+    "provenance": 0.20,
+    "independent_agreement": 0.15
+  },
+  "thresholds": {
+    "supported": 0.80,
+    "partial": 0.55
+  },
+  "missing_component_value": 0.0,
+  "reliable_contradiction_overrides_score": true,
+  "unsupported_relationship_forces_uncertain": true
+}
