@@ -6,13 +6,19 @@ The configured default is `gemini-3.8-flash`. As of 2026-10-14, Google's officia
 
 The model ID remains configurable through `GEMINI_MODEL`. Production startup will verify availability against the live account instead of assuming documentation implies account access.
 
-## Planned stages
+## Implemented local vertical slice
 
 1. Deterministic media validation and timestamp-preserving metadata extraction.
-2. Structured multimodal extraction of transcript, visible cues, slang, references, and ambiguity.
-3. Bounded multilingual retrieval from a curated and licensed corpus.
-4. Grounded generation that separates literal meaning, interpretation, alternatives, and uncertainty.
-5. Claim-level verification with explicit evidence relationships and contradictory evidence.
-6. Deterministic scoring, citation validation, and abstention.
+2. Gemini Files API upload and bounded file-processing wait.
+3. Structured multimodal extraction of transcript, video-local evidence, interpretation, tone, and ambiguity.
+4. Schema validation that requires evidence IDs for non-uncertain interpretations and caveats for uncertain interpretations.
+5. Provider-file deletion request and an explicit completed or failed job result.
 
-Prompts and response schemas will be versioned before the first live inference. Model calls are not implemented in the current slice, and no sample output is represented as live analysis.
+The implemented prompt is `video-analysis.v1`; the workflow is `analysis-pipeline.v1`. No live call was made during this audit because `GEMINI_API_KEY` was not configured. Unit/API tests use a clearly scoped fake analyzer to verify the result contract; the product never falls back to that fake.
+
+## Still planned
+
+- Curated, licensed multilingual retrieval beyond evidence visible in the submitted clip.
+- Independent claim verification and application of the deterministic support score to analysis output.
+- Durable telemetry, retries, and provider-deletion reconciliation.
+- Grounded follow-up questions.

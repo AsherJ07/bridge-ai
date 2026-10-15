@@ -1,12 +1,16 @@
 # Architecture
 
-## Current slice
+## Current local slice
 
 ```text
-Next.js /evaluation
-        │ GET summary
+Next.js /analyze + /evaluation
+        │ upload, create/poll job, GET summary
         ▼
-FastAPI evaluation API
+FastAPI API
+        ├── media content/size/duration validation
+        ├── process-local upload and idempotent job store
+        ├── Gemini Files + structured generation adapter
+        ├── result citation-reference validation
         ├── Pydantic label and configuration gates
         ├── deterministic evidence scoring
         ├── deterministic metric aggregation
@@ -15,9 +19,9 @@ FastAPI evaluation API
              └── model pricing and effective dates
 ```
 
-The scoring and aggregation modules are pure apart from explicit configuration loading. This keeps mathematical behavior unit-testable and reusable in asynchronous workers later.
+The scoring and aggregation modules are pure apart from explicit configuration loading. Analysis jobs run as FastAPI background tasks and are polled by the browser. This makes the local journey functional, but jobs and records are lost on restart and are not safe across multiple API workers.
 
-## Planned request flow
+## Target production request flow
 
 1. The web app uploads validated media directly to private storage through a short-lived signed request.
 2. FastAPI creates an idempotent analysis job.

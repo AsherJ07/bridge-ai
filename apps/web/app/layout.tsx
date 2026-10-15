@@ -19,6 +19,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <span>BRIDGE</span>
           </Link>
           <nav aria-label="Primary navigation">
+            <Link href="/analyze">Analyze</Link>
             <Link href="/evaluation">Evaluation</Link>
             <a
               href="https://github.com/AsherJ07/bridge-ai"

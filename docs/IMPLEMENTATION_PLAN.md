@@ -23,16 +23,16 @@ Last updated: 2026-10-14
 ## Phase 2 — Working analysis vertical slice
 
 - [ ] Add PostgreSQL entities and Alembic migrations for media, jobs, transcripts, evidence, interpretations, feedback, and evaluation.
-- [ ] Implement secure MP4/MOV/WebM validation, 100 MB and 120-second limits, SHA-256 hashing, and private object storage.
-- [ ] Add Redis-backed asynchronous jobs and real status events.
-- [ ] Implement Gemini Files API upload and structured multimodal extraction using `gemini-3.8-flash` after live-account model verification.
-- [ ] Persist model, prompt, pipeline, latency, and usage metadata.
+- [~] Implemented server-side MP4/MOV/WebM content, size, duration, and SHA-256 validation with private local temporary storage and bounded cleanup. Private object storage remains open.
+- [~] Implemented idempotent in-process background jobs and real polled stages. Redis-backed durability and multi-worker safety remain open.
+- [~] Implemented Gemini Files API upload, bounded preparation wait, structured multimodal response schema, and provider-file deletion request. Live-account execution remains unverified because no credential is available.
+- [~] Model, prompt, pipeline, and usage metadata are returned in the job result. Durable persistence and measured latency remain open.
 
 ## Phase 3 — Grounding and product flow
 
 - [ ] Build the curated, licensed reference corpus and multilingual retrieval.
 - [ ] Implement claim-level evidence association, citation validation, independent verification, and abstention.
-- [ ] Complete upload, processing, results, evidence inspection, feedback, and grounded follow-up UI.
+- [~] Upload, real processing states, structured results, timestamps, evidence links, and uncertainty UI are implemented. Feedback and grounded follow-up remain open.
 - [ ] Add explicit sample mode backed by licensed fixtures; keep it visually distinct from live inference.
 
 ## Phase 4 — Evaluation and demo readiness
@@ -50,3 +50,4 @@ Last updated: 2026-10-14
 2. No licensed video fixtures or verified reviewer labels exist yet.
 3. Hosting and private object-storage providers are not selected.
 4. Evidence thresholds need selection on a held-out labeled set before any calibration claim.
+5. Authentication, rate limiting, durable storage/jobs, and production retention enforcement are not implemented.

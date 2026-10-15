@@ -33,12 +33,12 @@ export default function HomePage() {
           Bridge helps you understand the language, humor, and cultural context behind videos from around the world.
         </p>
         <div className="hero-actions">
-          <button className="primary-action" type="button" disabled title="Video analysis is the next implementation phase">
+          <Link className="primary-action" href="/analyze">
             Analyze a video <ArrowRight size={18} />
-          </button>
+          </Link>
           <Link className="secondary-action" href="/evaluation">View evaluation</Link>
         </div>
-        <p className="availability">Live video analysis is not enabled in this milestone.</p>
+        <p className="availability">Live analysis requires a configured Gemini API key.</p>
       </section>
 
       <section className="benefits" aria-labelledby="benefits-title">
@@ -59,7 +59,7 @@ export default function HomePage() {
 
       <section className="trust-strip" aria-label="Data and AI limitations">
         <span>Private by design</span>
-        <p>Media processing will require explicit third-party AI disclosure and bounded retention.</p>
+        <p>Uploads require explicit third-party AI disclosure. Avoid sensitive media in this local prototype.</p>
         <span>Interpretations can be wrong</span>
         <p>Cultural context is presented as evidence-backed interpretation, never universal truth.</p>
       </section>

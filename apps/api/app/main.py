@@ -5,6 +5,8 @@ from datetime import date
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .analysis.routes import router as analysis_router
+from .analysis.settings import load_analysis_settings
 from .evaluation.config import load_pricing_config, load_scoring_config
 from .evaluation.metrics import aggregate_evaluation
 from .evaluation.models import (
@@ -20,13 +22,15 @@ app = FastAPI(
     version="0.1.0",
     description="Evidence scoring and evaluation for Bridge: Beyond Translation.",
 )
+analysis_settings = load_analysis_settings()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[analysis_settings.cors_origin],
     allow_credentials=False,
-    allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
+    allow_methods=["GET", "POST", "DELETE"],
+    allow_headers=["Content-Type", "Idempotency-Key"],
 )
+app.include_router(analysis_router)
 
 
 @app.get("/api/v1/health")
